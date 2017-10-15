@@ -58,7 +58,7 @@ RUN buildDeps=' \
         && wget "https://weechat.org/files/src/weechat-${WEECHAT_VERSION}.tar.xz" -O /tmp/weechat.tar.xz \
         && wget "https://weechat.org/files/src/weechat-${WEECHAT_VERSION}.tar.xz.asc" -O /tmp/weechat.tar.xz.asc \
 	&& export GNUPGHOME="$(mktemp -d)" \
-	&& gpg --keyserver p80.pool.sks-keyservers.net --recv-keys A9AB5AB778FA5C3522FD0378F82F4B16DEC408F8 \
+	&& gpg --keyserver ha.pool.sks-keyservers.net --recv-keys A9AB5AB778FA5C3522FD0378F82F4B16DEC408F8 \
 	&& gpg --batch --verify /tmp/weechat.tar.xz.asc /tmp/weechat.tar.xz \
        	&& rm -rf "$GNUPGHOME" /tmp/weechat.tar.xz.asc \
        	&& mkdir -p /usr/src/weechat \
