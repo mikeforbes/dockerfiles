@@ -32,7 +32,7 @@ RUN useradd --create-home --home-dir $HOME user \
 
 ENV LANG C.UTF-8
 # set version
-ENV WEECHAT_VERSION 1.9
+ENV WEECHAT_VERSION 1.9.1
 
 RUN buildDeps=' \
 	        autoconf \
