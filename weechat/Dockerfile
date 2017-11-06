@@ -1,6 +1,11 @@
 FROM debian:buster-slim
 MAINTAINER Mike, mike@nothing.net.nz
 
+# run with something like;
+sudo docker run --rm -it --cap-drop=all --security-opt=no-new-privileges \
+            -v ~/.weechat:/home/user/.weechat \
+            -v /etc/localtime:/etc/localtime:ro \
+            -t weechat:latest
 # add debian sources
 RUN echo deb-src http://deb.debian.org/debian/ testing main contrib non-free > /etc/apt/sources.list.d/testing-src.list
 
@@ -30,7 +35,6 @@ RUN useradd --create-home --home-dir $HOME user \
 	&& mkdir -p $HOME/.weechat \
 	&& chown -R user:user $HOME
 
-ENV LANG C.UTF-8
 # set version
 ENV WEECHAT_VERSION 1.9.1
 
@@ -77,9 +81,9 @@ RUN     apt-get update && \
         apt-get -y install unzip make gcc wget virtualenv python-virtualenv python-setuptools \
         && apt-get clean
 
-# weeslack deps
 WORKDIR $HOME
 USER user
+# weeslack
 RUN  virtualenv .env && chmod +x .env/bin/activate && . ~/.env/bin/activate && ~/.env/bin/pip install websocket-client \
             && wget https://raw.githubusercontent.com/wee-slack/wee-slack/master/wee_slack.py \
             && mkdir -p ~/.weechat/python/autoload && cp wee_slack.py ~/.weechat/python/autoload
@@ -91,4 +95,3 @@ ENV LANG C.UTF-8
 ENV TZ 'Pacific/Auckland'
 
 CMD bash -c 'source ~/.env/bin/activate; /usr/local/bin/weechat'
-
