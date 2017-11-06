@@ -2,7 +2,7 @@ FROM debian:buster-slim
 MAINTAINER Mike, mike@nothing.net.nz
 
 # run with something like;
-sudo docker run --rm -it --cap-drop=all --security-opt=no-new-privileges \
+# sudo docker run --rm -it --cap-drop=all --security-opt=no-new-privileges \
             -v ~/.weechat:/home/user/.weechat \
             -v /etc/localtime:/etc/localtime:ro \
             -t weechat:latest
