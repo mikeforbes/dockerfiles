@@ -3,9 +3,9 @@ MAINTAINER Mike, mike@nothing.net.nz
 
 # run with something like;
 # sudo docker run --rm -it --cap-drop=all --security-opt=no-new-privileges \
-            -v ~/.weechat:/home/user/.weechat \
-            -v /etc/localtime:/etc/localtime:ro \
-            -t weechat:latest
+#            -v ~/.weechat:/home/user/.weechat \
+#            -v /etc/localtime:/etc/localtime:ro \
+#            -t weechat:latest
 # add debian sources
 RUN echo deb-src http://deb.debian.org/debian/ testing main contrib non-free > /etc/apt/sources.list.d/testing-src.list
 
