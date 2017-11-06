@@ -74,19 +74,21 @@ RUN buildDeps=' \
       	&& apt-get purge -y --auto-remove $buildDeps
 # Plugin pre-reqs
 RUN     apt-get update && \
-        apt-get -y install weechat-curses weechat-plugins wget unzip make gcc wget python-pip \
+        apt-get -y install unzip make gcc wget virtualenv python-virtualenv python-setuptools \
         && apt-get clean
-# weeslack
-RUN pip install websocket-client
+
+# weeslack deps
+WORKDIR $HOME
+USER user
+RUN  virtualenv .env && chmod +x .env/bin/activate && . ~/.env/bin/activate && ~/.env/bin/pip install websocket-client \
+            && wget https://raw.githubusercontent.com/wee-slack/wee-slack/master/wee_slack.py \
+            && mkdir -p ~/.weechat/python/autoload && cp wee_slack.py ~/.weechat/python/autoload
+
 # setup our session
 ENV TERM screen-256color
 ENV LANG C.UTF-8
 # Set accordingly
 ENV TZ 'Pacific/Auckland'
 
+CMD bash -c 'source ~/.env/bin/activate; /usr/local/bin/weechat'
 
-
-WORKDIR $HOME
-
-USER user
-CMD ["weechat"]
