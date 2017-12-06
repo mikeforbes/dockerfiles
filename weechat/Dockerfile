@@ -6,6 +6,10 @@ MAINTAINER Mike, mike@nothing.net.nz
 #            -v ~/.weechat:/home/user/.weechat \
 #            -v /etc/localtime:/etc/localtime:ro \
 #            -t weechat:latest
+
+# set version
+ENV WEECHAT_VERSION 2.0
+
 # add debian sources
 RUN echo deb-src http://deb.debian.org/debian/ testing main contrib non-free > /etc/apt/sources.list.d/testing-src.list
 
@@ -35,13 +39,9 @@ RUN useradd --create-home --home-dir $HOME user \
 	&& mkdir -p $HOME/.weechat \
 	&& chown -R user:user $HOME
 
-# set version
-ENV WEECHAT_VERSION 1.9.1
-
 RUN buildDeps=' \
 	        autoconf \
                 automake \
-                checkinstall \
                 bzip2 \
                 cmake \
                 pkg-config \
@@ -76,15 +76,17 @@ RUN buildDeps=' \
         && make install \
        	&& rm -rf /usr/src/weechat \
       	&& apt-get purge -y --auto-remove $buildDeps
+
 # Plugin pre-reqs
-RUN     apt-get update && \
-        apt-get -y install unzip make gcc wget virtualenv python-virtualenv python-setuptools \
+RUN     apt-get update \
+        && apt-get -y --no-install-recommends install guile-2.0-dev libruby libpython2.7 libtcl8.6 unzip virtualenv python-virtualenv python-setuptools \
         && apt-get clean
 
 WORKDIR $HOME
 USER user
+
 # weeslack
-RUN  virtualenv .env && chmod +x .env/bin/activate && . ~/.env/bin/activate && ~/.env/bin/pip install websocket-client \
+RUN virtualenv .env && chmod +x .env/bin/activate && . ~/.env/bin/activate && ~/.env/bin/pip install websocket-client \
             && wget https://raw.githubusercontent.com/wee-slack/wee-slack/master/wee_slack.py \
             && mkdir -p ~/.weechat/python/autoload && cp wee_slack.py ~/.weechat/python/autoload
 
