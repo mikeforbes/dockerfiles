@@ -8,7 +8,7 @@ MAINTAINER Mike, mike@nothing.net.nz
 #            -t weechat:latest
 
 # set version
-ENV WEECHAT_VERSION 2.0
+ENV WEECHAT_VERSION 2.0.1
 
 # add debian sources
 RUN echo deb-src http://deb.debian.org/debian/ testing main contrib non-free > /etc/apt/sources.list.d/testing-src.list
@@ -62,7 +62,7 @@ RUN buildDeps=' \
         && wget "https://weechat.org/files/src/weechat-${WEECHAT_VERSION}.tar.xz" -O /tmp/weechat.tar.xz \
         && wget "https://weechat.org/files/src/weechat-${WEECHAT_VERSION}.tar.xz.asc" -O /tmp/weechat.tar.xz.asc \
 	&& export GNUPGHOME="$(mktemp -d)" \
-	&& gpg --keyserver ha.pool.sks-keyservers.net --recv-keys A9AB5AB778FA5C3522FD0378F82F4B16DEC408F8 \
+	&& gpg --keyserver ipv4.pool.sks-keyservers.net --recv-keys A9AB5AB778FA5C3522FD0378F82F4B16DEC408F8 \
 	&& gpg --batch --verify /tmp/weechat.tar.xz.asc /tmp/weechat.tar.xz \
        	&& rm -rf "$GNUPGHOME" /tmp/weechat.tar.xz.asc \
        	&& mkdir -p /usr/src/weechat \
