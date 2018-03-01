@@ -9,16 +9,22 @@ MAINTAINER Mike, mike@nothing.net.nz
 
 # set version
 ENV WEECHAT_VERSION 2.0.1
+# set up our session
+ENV TERM screen-256color
+ENV LANG C.UTF-8
+# Set accordingly
+ENV TZ 'Pacific/Auckland'
+# set user
+ENV HOME /home/user
+
 
 # add debian sources
 RUN echo deb-src http://deb.debian.org/debian/ testing main contrib non-free > /etc/apt/sources.list.d/testing-src.list
 
 # avoids fsync(2)s on filesystem files, but still performs them on the dpkg database.
 # may improve performance, probably useless.
-RUN echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup
-
-# no cache
-RUN echo "Acquire::http {No-Cache=True;};" > /etc/apt/apt.conf.d/no-cache
+# also remove cache
+RUN echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup && echo "Acquire::http {No-Cache=True;};" > /etc/apt/apt.conf.d/no-cache
 
 # base stuff, build tools
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -34,7 +40,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
                 xz-utils \
 	&& rm -rf /var/lib/apt/lists/*
 # make a user
-ENV HOME /home/user
 RUN useradd --create-home --home-dir $HOME user \
 	&& mkdir -p $HOME/.weechat \
 	&& chown -R user:user $HOME
@@ -89,11 +94,5 @@ USER user
 RUN virtualenv .env && chmod +x .env/bin/activate && . ~/.env/bin/activate && ~/.env/bin/pip install websocket-client \
             && wget https://raw.githubusercontent.com/wee-slack/wee-slack/master/wee_slack.py \
             && mkdir -p ~/.weechat/python/autoload && cp wee_slack.py ~/.weechat/python/autoload
-
-# setup our session
-ENV TERM screen-256color
-ENV LANG C.UTF-8
-# Set accordingly
-ENV TZ 'Pacific/Auckland'
 
 CMD bash -c 'source ~/.env/bin/activate; /usr/local/bin/weechat'
