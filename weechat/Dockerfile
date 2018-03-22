@@ -8,7 +8,7 @@ MAINTAINER Mike, mike@nothing.net.nz
 #            -t weechat:latest
 
 # set version
-ENV WEECHAT_VERSION 2.0.1
+ENV WEECHAT_VERSION 2.1
 # set up our session
 ENV TERM screen-256color
 ENV LANG C.UTF-8
